@@ -1,0 +1,200 @@
+<!-- res/layout/activity_main.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.shuffleit.viewModels.AudioControlViewModel" />
+    </data>
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#A9A9A9"
+            tools:context=".views.AudioControlView">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E64A19"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageButton
+                    android:id="@+id/menuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_menu" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/audioImage"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_below="@id/toolbar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:background="@android:color/darker_gray"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_audio_image_placeholder" />
+
+            <RelativeLayout
+                android:id="@+id/controlPad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/seekBar"
+                android:layout_below="@+id/trackName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp">
+
+                <ImageButton
+                    android:id="@+id/volumeUpButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_above="@id/playPauseButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/ic_plus"
+                    android:onClick="@{() -> viewModel.volumeUp()}" />
+
+                <ImageButton
+                    android:id="@+id/playPauseButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toEndOf="@id/prevButton"
+                    android:background="@{viewModel.isPlaying ? @drawable/ic_pause : @drawable/ic_play}"
+                    android:onClick="@{() -> viewModel.playPause()}" />
+
+                <ImageButton
+                    android:id="@+id/prevButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ic_prev"
+                    android:onClick="@{() -> viewModel.previousTrack()}" />
+
+                <ImageButton
+                    android:id="@+id/nextButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/playPauseButton"
+                    android:background="@drawable/ic_next"
+                    android:onClick="@{() -> viewModel.nextTrack()}" />
+
+                <ImageButton
+                    android:id="@+id/volumeDownButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_below="@id/playPauseButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/ic_minus"
+                    android:onClick="@{() -> viewModel.volumeDown()}" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/timeNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="32dp"
+                android:text="@{viewModel.currentTimeString}" />
+
+            <TextView
+                android:id="@+id/timeFull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="32dp"
+                android:text="@{viewModel.trackLenString}" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="32dp"
+                android:layout_toStartOf="@+id/timeFull"
+                android:layout_toEndOf="@+id/timeNow"
+                android:max="@{viewModel.trackLen}"
+                android:onSeekBarChangeListener="@{viewModel.seekBarChangeListener}"
+                android:progress="@{viewModel.currentTime}" />
+
+            <TextView
+                android:id="@+id/appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="164dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/shuffle_it"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/trackName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/audioImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:text="@{viewModel.trackTitle}"/>
+
+        </RelativeLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#A9A9A9"
+            android:fitsSystemWindows="false"
+            app:headerLayout="@layout/playlist_menu_header"
+            app:menu="@menu/playlist_menu">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/add_playlist_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:text="Add Playlist" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/playlist_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp" />
+            </RelativeLayout>
+
+        </com.google.android.material.navigation.NavigationView>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>
